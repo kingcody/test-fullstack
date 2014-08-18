@@ -10,17 +10,15 @@ describe('Directive: navbar', function () {
   var element,
       scope,
       state,
-      NavbarCtrl;
+      NavbarCtrl,
+      isLoggedIn,
+      isAdmin;
 
   var logIn = function(s, a) {
     if (a) {
-      s.Auth.isAdmin = function() {
-        return true;
-      };
+      isAdmin = true;
     }
-    s.Auth.isLoggedIn = function() {
-      return true;
-    };
+    isLoggedIn = true;
     s.$apply();
   };
 
@@ -31,6 +29,58 @@ describe('Directive: navbar', function () {
     return 'li.ng-hide a[ui-sref="' + ref + '"]';
   };
 
+  beforeEach(function() {
+    module('testFullstackApp', function($provide, $controllerProvider) {
+      isLoggedIn = isAdmin = false;
+
+      $provide.factory('Navbar', function(){
+        return {
+          isCollapsed: true,
+          menu: [{
+            title: 'Home',
+            state: 'main'
+          }, {
+            title: 'Blog',
+            state: 'blog'
+          }, {
+            title: 'Contact us',
+            state: 'contact'
+          }]
+        };
+      });
+
+      $controllerProvider.register('NavbarCtrl', function(Navbar, $scope) {
+        $scope.Auth = {
+          isLoggedIn: function() {
+            return isLoggedIn;
+          },
+          isAdmin: function() {
+            return isAdmin;
+          },
+          getCurrentUser: function() {
+            if (isAdmin) {
+              return {
+                name: 'Admin User',
+                email: 'admin@admin.com',
+                role: 'admin'
+              }
+            }
+            else if (isLoggedIn) {
+              return {
+                name: 'Test User',
+                email: 'test@test.com',
+                role: 'user'
+              };
+            } else {
+              return {};
+            }
+          }
+        }
+
+        return Navbar;
+      });
+    });
+  });
 
   beforeEach(inject(function ($rootScope, $compile, $state) {
     scope = $rootScope.$new();
@@ -40,7 +90,7 @@ describe('Directive: navbar', function () {
     scope.$apply();
     NavbarCtrl = element.controller('navbar');
 
-    state.expectTransitionTo('main');
+    //state.expectTransitionTo('main');
   }));
 
   it('should make as many menu items as there are items in NavbarCtrl.menu', function () {
@@ -101,5 +151,15 @@ describe('Directive: navbar', function () {
 
     expect(element.find(shown('admin')).length).toBe(1);
     expect(element.find(hidden('admin')).length).toBe(0);
+  });
+
+  it('should expand when the navbar button is clicked, and collapse when clicked again', function() {
+    var isCollapsed = NavbarCtrl.isCollapsed;
+
+    element.find('button.navbar-toggle').click();
+    expect(NavbarCtrl.isCollapsed).not.toBe(isCollapsed);
+
+    element.find('button.navbar-toggle').click();
+    expect(NavbarCtrl.isCollapsed).toBe(isCollapsed);
   });
 });
