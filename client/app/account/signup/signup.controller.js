@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('testFullstackApp')
-  .controller('SignupCtrl', function ($scope, Auth, $state) {
+  .controller('SignupCtrl', function ($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -16,7 +16,7 @@ angular.module('testFullstackApp')
         })
         .then( function() {
           // Account created, redirect to home
-          $state.go('main');
+          $location.path('/');
         })
         .catch( function(err) {
           err = err.data;

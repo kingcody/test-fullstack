@@ -42,12 +42,12 @@ angular.module('testFullstackApp', [
     };
   })
 
-  .run(function ($rootScope, $state, Auth) {
+  .run(function ($rootScope, $location, Auth) {
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
-      Auth.isLoggedIn(function(loggedIn) {
+      Auth.isLoggedInAsync(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
-          $state.go('login');
+          $location.path('/login');
         }
       });
     });

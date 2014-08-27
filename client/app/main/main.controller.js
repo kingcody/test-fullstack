@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('testFullstackApp')
-  .controller('MainCtrl', function ($scope, $http, socket) {
+  .controller('MainCtrl', function ($scope, $http, socket, Modal) {
     $scope.awesomeThings = [];
 
     $http.get('/api/things').success(function(awesomeThings) {
@@ -22,6 +22,6 @@ angular.module('testFullstackApp')
     };
 
     $scope.$on('$destroy', function () {
-      socket.unsyncUpdates('thing');
+      socket.unsyncUpdates($scope.awesomeThings);
     });
   });

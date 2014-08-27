@@ -4,21 +4,14 @@
 
 'use strict';
 
+var events = require('events');
 var thing = require('./thing.model');
 
-exports.register = function(socket) {
+module.exports = function(socketio) {
   thing.schema.post('save', function (doc) {
-    onSave(socket, doc);
+    socketio.to('thing').emit('thing:save', doc);
   });
   thing.schema.post('remove', function (doc) {
-    onRemove(socket, doc);
+    socketio.to('thing').emit('thing:remove', doc);
   });
-}
-
-function onSave(socket, doc, cb) {
-  socket.emit('thing:save', doc);
-}
-
-function onRemove(socket, doc, cb) {
-  socket.emit('thing:remove', doc);
-}
+};

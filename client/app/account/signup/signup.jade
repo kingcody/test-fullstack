@@ -1,3 +1,4 @@
+div(ng-include='"components/navbar/navbar.html"')
 .container
   .row
     .col-sm-12
@@ -35,7 +36,7 @@
           button.btn.btn-inverse.btn-lg.btn-login(type='submit')
             | Sign up
           = ' '
-          a.btn.btn-default.btn-lg.btn-register(ui-sref='login')
+          a.btn.btn-default.btn-lg.btn-register(href='/login')
             | Login
 
 

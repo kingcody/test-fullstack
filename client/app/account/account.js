@@ -8,15 +8,6 @@ angular.module('testFullstackApp')
         templateUrl: 'app/account/login/login.html',
         controller: 'LoginCtrl'
       })
-      .state('logout', {
-        url: '/logout?referrer',
-        referrer: 'main',
-        controller: function($state, Auth) {
-          var referrer = $state.params.referrer || $state.current.referrer;
-          Auth.logout();
-          $state.go(referrer);
-        }
-      })
       .state('signup', {
         url: '/signup',
         templateUrl: 'app/account/signup/signup.html',
@@ -28,11 +19,4 @@ angular.module('testFullstackApp')
         controller: 'SettingsCtrl',
         authenticate: true
       });
-  })
-  .run(function($rootScope) {
-    $rootScope.$on('$stateChangeStart', function(event, next, nextParams, current) {
-      if (next.name === 'logout') {
-        next.referrer = (current && current.name) ? current.name : 'main';
-      }
-    });
   });

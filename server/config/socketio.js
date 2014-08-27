@@ -17,8 +17,8 @@ function onConnect(socket) {
     console.info('[%s] %s', socket.address, JSON.stringify(data, null, 2));
   });
 
-  // Insert sockets below
-  require('../api/thing/thing.socket').register(socket);
+  socket.on('join', socket.join);
+  socket.on('leave', socket.leave);
 }
 
 module.exports = function (socketio) {
@@ -53,5 +53,9 @@ module.exports = function (socketio) {
     // Call onConnect.
     onConnect(socket);
     console.info('[%s] CONNECTED', socket.address);
+
   });
+
+  // Insert sockets below
+  require('../api/thing/thing.socket')(socketio);
 };

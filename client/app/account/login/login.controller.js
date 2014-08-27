@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('testFullstackApp')
-  .controller('LoginCtrl', function ($scope, Auth, $state) {
+  .controller('LoginCtrl', function ($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -15,7 +15,7 @@ angular.module('testFullstackApp')
         })
         .then( function() {
           // Logged in, redirect to home
-          $state.go('main');
+          $location.path('/');
         })
         .catch( function(err) {
           $scope.errors.other = err.message;

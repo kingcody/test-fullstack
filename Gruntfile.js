@@ -1,4 +1,4 @@
-// Generated on 2014-08-17 using generator-angular-fullstack 2.0.10
+// Generated on 2014-08-24 using generator-angular-fullstack 2.0.10
 'use strict';
 
 module.exports = function (grunt) {
@@ -134,7 +134,7 @@ module.exports = function (grunt) {
         options: {
           jshintrc: 'server/.jshintrc'
         },
-        src: [ 'server/{,*/}*.js']
+        src: [ 'server/**/*.js']
       },
       all: [
         '<%= yeoman.client %>/{app,components}/**/*.js',
@@ -435,7 +435,8 @@ module.exports = function (grunt) {
 
     mochaTest: {
       options: {
-        reporter: 'spec'
+        reporter: 'spec',
+        require: 'mocha.conf.js'
       },
       src: ['server/**/*.spec.js']
     },
