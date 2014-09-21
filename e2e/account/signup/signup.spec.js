@@ -1,19 +1,21 @@
 'use strict';
 
-var config = protractor.getInstance().params,
-    UserModel = require(config.serverConfig.root + '/server/api/user/user.model');
+var config = protractor.getInstance().params;
+var UserModel = require(config.serverConfig.root + '/server/api/user/user.model');
 
 describe('Signup View', function() {
-  var page,
-      loadPage = function() {
-        browser.get('/signup');
-        page = require('./signup.po');
-      },
-      testUser = {
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'test'
-      };
+  var page;
+
+  var loadPage = function() {
+    browser.get('/signup');
+    page = require('./signup.po');
+  };
+
+  var testUser = {
+    name: 'Test User',
+    email: 'test@test.com',
+    password: 'test'
+  };
 
   beforeEach(function() {
     loadPage();
@@ -31,29 +33,29 @@ describe('Signup View', function() {
   });
 
   describe('with local auth', function() {
+
     it('should signup a new user, log them in, and redirecting to "/"', function(done) {
       UserModel.remove(function() {
-        page.signup(testUser, function() {
-          var navbar = require('../../components/navbar/navbar.po');
+        page.signup(testUser);
 
-          expect(browser.getLocationAbsUrl()).toBe(config.baseUrl + '/');
-          expect(navbar.navbarAccountGreeting.getText()).toBe('Hello ' + testUser.name);
+        var navbar = require('../../components/navbar/navbar.po');
 
-          done();
-        });
-      });
-    });
-
-    it('should indicate signup failures', function(done) {
-      page.signup(testUser, function() {
-        expect(page.form.email.getAttribute('class')).toContain('ng-invalid-mongoose');
-
-        var helpBlock = page.form.element(by.css('.form-group.has-error .help-block.ng-binding'));
-        expect(helpBlock.getText()).toBe('The specified email address is already in use.');
+        expect(browser.getLocationAbsUrl()).toBe(config.baseUrl + '/');
+        expect(navbar.navbarAccountGreeting.getText()).toBe('Hello ' + testUser.name);
 
         done();
       });
     });
-  });
 
+    it('should indicate signup failures', function() {
+      page.signup(testUser);
+
+      expect(browser.getLocationAbsUrl()).toBe(config.baseUrl + '/signup');
+      expect(page.form.email.getAttribute('class')).toContain('ng-invalid-mongoose');
+
+      var helpBlock = page.form.element(by.css('.form-group.has-error .help-block.ng-binding'));
+      expect(helpBlock.getText()).toBe('The specified email address is already in use.');
+    });
+
+  });
 });

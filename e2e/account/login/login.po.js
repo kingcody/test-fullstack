@@ -5,14 +5,13 @@
 
 'use strict';
 
-var SignupPage = function() {
+var LoginPage = function() {
   this.form = element(by.css('.form'));
-  this.form.name = this.form.element(by.model('user.name'));
   this.form.email = this.form.element(by.model('user.email'));
   this.form.password = this.form.element(by.model('user.password'));
-  this.form.submit = this.form.element(by.css('.btn-register'));
+  this.form.submit = this.form.element(by.css('.btn-login'));
 
-  this.signup = function(data) {
+  this.login = function(data) {
     for (var prop in data) {
       var formElem = this.form[prop];
       if (data.hasOwnProperty(prop) && formElem && typeof formElem.sendKeys === 'function') {
@@ -24,5 +23,5 @@ var SignupPage = function() {
   };
 };
 
-module.exports = new SignupPage();
+module.exports = new LoginPage();
 
